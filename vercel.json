@@ -1,0 +1,21 @@
+{
+  "buildCommand": "pnpm run build",
+  "env": {
+    "ZENDESK_SUBDOMAIN": {
+      "description": "Your Zendesk subdomain (e.g., company in company.zendesk.com)",
+      "required": true
+    },
+    "ZENDESK_ADMIN_EMAIL": {
+      "description": "Zendesk admin email address",
+      "required": true
+    },
+    "ZENDESK_API_TOKEN": {
+      "description": "Zendesk API token",
+      "required": true
+    },
+    "INTEGRATION_NAME": {
+      "description": "Name for the ZIS integration (lowercase letters, numbers, hyphens, and underscores only)",
+      "required": true
+    }
+  }
+} 

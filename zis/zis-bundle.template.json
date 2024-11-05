@@ -1,0 +1,62 @@
+{
+  "name": "Inkeep Autoresponder",
+  "description": "Posts ticket data to an external target on ticket create",
+  "zis_template_version": "2019-10-14",
+  "resources": {
+    "action_post_ticket_data": {
+      "type": "ZIS::Action::Http",
+      "properties": {
+        "name": "action_post_ticket_data",
+        "definition": {
+          "method": "POST",
+          "url": "EXTERNAL_TARGET_URL_PLACEHOLDER",
+          "headers": [
+            {
+              "key": "X-Zendesk-Ticket-Id",
+              "value.$": "$.ticketId"
+            }
+          ],
+          "requestBody": {
+            "data": {
+              "status.$": "$.ticketStatus",
+              "priority.$": "$.ticketPriority",
+              "subject.$": "$.ticketSubject",
+              "description.$": "$.ticketDescription",
+              "requester.$": "$.ticketRequester"
+            }
+          }
+        }
+      }
+    },
+    "flow_ticket_created": {
+      "type": "ZIS::Flow",
+      "properties": {
+        "name": "ticket-created-flow",
+        "definition": {
+          "StartAt": "ZendeskTicketCreated",
+          "States": {
+            "ZendeskTicketCreated": {
+              "Type": "Action",
+              "ActionName": "zis:INTEGRATION_NAME_PLACEHOLDER:action:action_post_ticket_data",
+              "Parameters": {
+                "ticketId.$": "$.input.ticket_event.ticket.id",
+                "ticketStatus.$": "$.input.ticket_event.ticket.status",
+                "ticketPriority.$": "$.input.ticket_event.ticket.priority"
+              },
+              "End": true
+            }
+          }
+        }
+      }
+    },
+    "jobspec_handle_ticket_event": {
+      "type": "ZIS::JobSpec",
+      "properties": {
+        "name": "handle-ticket-created-event",
+        "event_source": "support",
+        "event_type": "ticket.TicketCreated",
+        "flow_name": "zis:INTEGRATION_NAME_PLACEHOLDER:flow:ticket-created-flow"
+      }
+    }
+  }
+} 
