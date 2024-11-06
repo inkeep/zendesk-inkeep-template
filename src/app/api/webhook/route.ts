@@ -120,6 +120,7 @@ export const POST = async (req: Request) => {
           comment: {
             body: response.text,
             public: !process.env.INTERNAL_ONLY,
+            ...(process.env.AI_AGENT_USER_ID && { author_id: Number(process.env.AI_AGENT_USER_ID) }),
           },
         },
       } as CreateOrUpdateTicket);
@@ -130,6 +131,7 @@ export const POST = async (req: Request) => {
           comment: {
             body: `Internal Note\n\nUser Metadata: ${JSON.stringify(userMetadata, null, 2)}`,
             public: false,
+            ...(process.env.AI_AGENT_USER_ID && { author_id: Number(process.env.AI_AGENT_USER_ID) }),
           },
         },
       } as CreateOrUpdateTicket);
