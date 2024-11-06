@@ -54,7 +54,7 @@ GITHUB_CLIENT_SECRET=
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYOUR_REPO_HERE&env=DATABASE_URL,AUTH_SECRET,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET&project-name=your-project-name&repository-name=your-repo-name)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finkeep%2Fzendesk-inkeep-template&env=ZENDESK_SUBDOMAIN,ZENDESK_API_TOKEN,ZENDESK_API_USER&project-name=zendesk-inkeep-template&repository-name=zendesk-inkeep-template)
 
 Required environment variables for deployment:
 - `DATABASE_URL`: Your PostgreSQL database connection string
