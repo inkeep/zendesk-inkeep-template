@@ -1,5 +1,8 @@
 # Zendesk AI Auto Responder
 
+This template repo contains a NextJS app as well as bash scripts that will help you configure your zendesk workspace to use Inkeep to auto-respond to new tickets using your Inkeep project.
+
+
 ## Quick Setup
 
 1. Deploy to Vercel using the button below and provide the required environment variables:
