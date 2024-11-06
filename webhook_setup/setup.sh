@@ -131,7 +131,7 @@ trigger_data=$(cat <<EOF
       {
         "field": "notification_webhook",
         "value": [
-          "$AI_PROCESSING_ENDPOINT",
+          "$AI_RESPONDER_WEBHOOK_ID",
           "{\"ticket_id\":\"\{\{ticket.id\}\}\",\"ticket_title\":\"\{\{ticket.title\}\}\"}"
         ]
       }
@@ -162,4 +162,4 @@ fi
 
 echo "Setup complete! You can view your resources at:"
 echo "- Trigger: https://$ZENDESK_SUBDOMAIN.zendesk.com/admin/objects-rules/rules/triggers/$trigger_id"
-echo "- Webhook: https://$ZENDESK_SUBDOMAIN.zendesk.com/admin/apps-integrations/actions-webhooks/webhooks/$webhook_id/details"
+echo "- Webhook: https://$ZENDESK_SUBDOMAIN.zendesk.com/admin/apps-integrations/actions-webhooks/webhooks/$AI_RESPONDER_WEBHOOK_ID/details"
