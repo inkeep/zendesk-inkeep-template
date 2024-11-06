@@ -116,7 +116,7 @@ export const POST = async (req: Request) => {
       ticket: {
         comment: {
           body: response.text,
-          public: true,
+          public: !process.env.INTERNAL_ONLY,
         }
       }
       });
