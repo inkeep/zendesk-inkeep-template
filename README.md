@@ -20,6 +20,48 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Initial Setup
+
+Before running the development server, you'll need to run the following scripts:
+
+```bash
+# Sets up initial configuration and dependencies
+./setup.sh
+
+# Verifies your environment is properly configured
+./verify.sh
+
+# Optional: Cleans up temporary files and caches
+./cleanup.sh
+```
+
+### What these scripts do:
+
+- `setup.sh`: Initializes the project by installing dependencies, setting up environment variables, and configuring necessary services.
+- `verify.sh`: Checks that all required dependencies are installed and environment variables are properly set.
+- `cleanup.sh`: Removes temporary files, clears caches, and resets the development environment to a clean state.
+
+## Environment Variables
+
+The following environment variables are required:
+
+```bash
+DATABASE_URL=
+AUTH_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+
+## Deploy on Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYOUR_REPO_HERE&env=DATABASE_URL,AUTH_SECRET,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET&project-name=your-project-name&repository-name=your-repo-name)
+
+Required environment variables for deployment:
+- `DATABASE_URL`: Your PostgreSQL database connection string
+- `AUTH_SECRET`: A secret key for authentication (min 32 characters)
+- `GITHUB_CLIENT_ID`: OAuth client ID from GitHub
+- `GITHUB_CLIENT_SECRET`: OAuth client secret from GitHub
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -28,9 +70,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

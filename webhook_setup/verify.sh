@@ -28,6 +28,10 @@ echo "Fetching webhooks..."
 webhooks_response=$(curl -s -i -u "$ZENDESK_API_USER/token:$ZENDESK_API_TOKEN" \
   -X GET "https://$ZENDESK_SUBDOMAIN.zendesk.com/api/v2/webhooks")
 
+# Echo full response for debugging
+echo "Full Response:"
+echo "$webhooks_response"
+
 # Check HTTP status code
 http_status=$(echo "$webhooks_response" | head -n 1 | cut -d' ' -f2)
 
@@ -42,15 +46,15 @@ if [ "$http_status" != "200" ]; then
     exit 1
 fi
 
-# Extract JSON body (skip headers)
-json_response=$(echo "$webhooks_response" | awk 'BEGIN{RS="\r\n\r\n";}{print $0}' | tail -n 1)
+# Extract JSON body (skip headers) - improved version
+json_response=$(echo "$webhooks_response" | sed -n '/^{/,$p')
 
 # Debug webhook response
 echo "Debug - Webhook Response:"
-echo "$json_response" | jq '.'
+echo "$json_response" | jq '.' || echo "Failed to parse JSON response"
 
-# Check if our endpoint exists as a webhook
-matching_webhook=$(echo "$json_response" | jq --arg endpoint "$AI_PROCESSING_ENDPOINT" '.[] | select(.endpoint == $endpoint)')
+# Check if our endpoint exists as a webhook (fixed to handle proper Zendesk response structure)
+matching_webhook=$(echo "$json_response" | jq --arg endpoint "$AI_PROCESSING_ENDPOINT" '.webhooks[] | select(.endpoint == $endpoint)')
 
 if [ -z "$matching_webhook" ]; then
     echo "No webhook found with endpoint: $AI_PROCESSING_ENDPOINT"
@@ -65,12 +69,20 @@ echo "Fetching triggers..."
 triggers_response=$(curl -s -u "$ZENDESK_API_USER/token:$ZENDESK_API_TOKEN" \
   -X GET "https://$ZENDESK_SUBDOMAIN.zendesk.com/api/v2/triggers/active.json")
 
+# Echo raw response
+echo "Raw Triggers Response:"
+echo "$triggers_response"
+
+# Extract and validate JSON
+echo -e "\nParsed Triggers JSON:"
+echo "$triggers_response" | jq '.' || echo "Failed to parse triggers JSON response"
+
 # Check for triggers using our webhook
 echo "Checking for webhook-trigger pairs..."
 matching_triggers=$(echo "$triggers_response" | jq --arg webhook_id "$webhook_id" '
   .triggers[] | 
   select(.actions[] | 
-    select(.field == "notification_webhook" and .value[1] == $webhook_id)
+    select(.field == "notification_webhook" and .value[0] == $webhook_id)
   )')
 
 if [ -z "$matching_triggers" ]; then

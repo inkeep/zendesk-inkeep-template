@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { createClient } from "node-zendesk";
+import { generateQaModeResponse } from "@/lib/intelligent-support/support";
+import { ZendeskMessage } from "@/lib/zendeskConversations";
 
 // Initialize Zendesk client
 const client = createClient({
@@ -22,7 +24,6 @@ export const POST = async (req: Request) => {
   const bodySchema = z.object({
     ticket_id: z.string().transform((val) => parseInt(val, 10)),
     ticket_title: z.string(),
-    ticket_description: z.string()
   });
 
   const result = bodySchema.safeParse(body);    
@@ -66,25 +67,70 @@ export const POST = async (req: Request) => {
     console.log('User Metadata:', userMetadata);
     console.log('Organization Metadata:', organization_fields, tags, notes, name);
 
-    // First add the public comment
+    console.log(commentsResponse);
+
+    // Create a cache for author details
+    const authorCache = new Map<number, any>();
+    
+    // Get unique author IDs from comments
+    const authorIds = [...new Set(commentsResponse.map(comment => comment.author_id))];
+    
+    // Fetch all unique authors in parallel
+    console.log('Fetching authors...');
+    await Promise.all(
+      authorIds.map(async (authorId) => {
+        const authorResponse = await client.users.show(authorId);
+        authorCache.set(authorId, authorResponse.result);
+      })
+    );
+
+    console.log('Author Cache:');
+    console.dir(authorCache);
+
+    const messages = commentsResponse.map<ZendeskMessage>((comment) => {
+      const author = authorCache.get(comment.author_id);
+      return {
+        id: comment.id,
+        received: comment.created_at,
+        author: {
+          type: author.role === 'end-user' ? 'user' : 'business',
+          name: author.name,
+          email: author.email,
+        },
+        content: {
+          text: comment.body,
+        },
+        source: 'zendesk',
+      };
+    });
+
+    const response = await generateQaModeResponse({ messages, metadata: {
+      userMetadata,
+      organizationMetadata: {organization_fields, tags, notes, name}
+    }})
+
+
+    if (response.aiAnnotations.answerConfidence === 'very_confident') {
+       // First add the public comment
     await client.tickets.update(ticket_id, {
       ticket: {
         comment: {
-          body: "**We're** looking into that for you. In the meantime, this might help...",
+          body: response.text,
           public: true,
         }
       }
-    });
-
-    // Then add the internal note with metadata
-    await client.tickets.update(ticket_id, {
-      ticket: {
-        comment: {
-          body: `Internal Note\n\nUser Metadata: ${JSON.stringify(userMetadata, null, 2)}`,
-          public: false,
+      });
+    } else {
+      // Then add the internal note with metadata
+      await client.tickets.update(ticket_id, {
+        ticket: {
+          comment: {
+            body: `Internal Note\n\nUser Metadata: ${JSON.stringify(userMetadata, null, 2)}`,
+            public: false,
+          }
         }
-      }
-    });
+      });
+    }
 
     return Response.json({ 
       message: "Ticket processed",
