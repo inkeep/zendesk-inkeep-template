@@ -53,7 +53,7 @@ The following environment variables are required:
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finkeep%2Fzendesk-inkeep-template&env=ZENDESK_SUBDOMAIN,ZENDESK_API_TOKEN,ZENDESK_API_USER&project-name=zendesk-inkeep-responder-1&repository-name=zendesk-inkeep-responder-1)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finkeep%2Fzendesk-inkeep-template&env=ZENDESK_SUBDOMAIN,ZENDESK_API_TOKEN,ZENDESK_API_USER,INKEEP_API_KEY&project-name=zendesk-inkeep-responder-1&repository-name=zendesk-inkeep-responder-1)
 
 Required environment variables for deployment:
 - `DATABASE_URL`: Your PostgreSQL database connection string

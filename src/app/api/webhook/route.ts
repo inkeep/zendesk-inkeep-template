@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createClient } from "node-zendesk";
 import { generateQaModeResponse } from "@/lib/intelligent-support/support";
-import { ZendeskMessage } from "@/lib/zendeskConversations";
+import type { ZendeskMessage } from "@/lib/zendeskConversations";
 
 // Initialize Zendesk client
 const client = createClient({
@@ -22,7 +22,7 @@ export const POST = async (req: Request) => {
   }
 
   const bodySchema = z.object({
-    ticket_id: z.string().transform((val) => parseInt(val, 10)),
+    ticket_id: z.string().transform((val) => Number.parseInt(val, 10)),
     ticket_title: z.string(),
   });
 
