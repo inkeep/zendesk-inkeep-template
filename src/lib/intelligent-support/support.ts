@@ -54,14 +54,6 @@ export const generateQaModeResponse = async ({
       },
     },
     toolChoice: 'auto',
-    experimental_telemetry: {
-      isEnabled: true,
-      functionId: 'generateQaModeResponse',
-      metadata: {
-        isAutoResponder: true,
-        ...(metadata ?? {}),
-      },
-    },
   });
 
   const aiAnnotations = toolCalls.find(toolCall => toolCall.toolName === 'provideAIAnnotations')?.args
