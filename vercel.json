@@ -1,17 +1,3 @@
 {
-  "buildCommand": "pnpm run build",
-  "env": {
-    "ZENDESK_SUBDOMAIN": {
-      "description": "Your Zendesk subdomain (e.g., company in company.zendesk.com)"
-    },
-    "ZENDESK_API_USER": {
-      "description": "Zendesk admin email address"
-    },
-    "ZENDESK_API_TOKEN": {
-      "description": "Zendesk API token"
-    },
-    "INKEEP_API_KEY": {
-      "description": "Inkeep API key"
-    }
-  }
+  "buildCommand": "pnpm run build"
 } 
