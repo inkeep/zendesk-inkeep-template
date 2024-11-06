@@ -45,16 +45,15 @@ Before running the development server, you'll need to run the following scripts:
 
 The following environment variables are required:
 
-```bash
-DATABASE_URL=
-AUTH_SECRET=
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
-```
+    ```bash
+    ZENDESK_SUBDOMAIN=<your-subdomain> # e.g. if your Zendesk URL is mycompany.zendesk.com, enter 'mycompany'
+    ZENDESK_API_TOKEN=<create an API token at https://support.zendesk.com/hc/en-us/articles/4408889192858-Generating-a-new-API-token>
+    ZENDESK_API_USER=<email address of your zendesk user>
+    ```
 
 ## Deploy on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finkeep%2Fzendesk-inkeep-template&env=ZENDESK_SUBDOMAIN,ZENDESK_API_TOKEN,ZENDESK_API_USER&project-name=zendesk-inkeep-template&repository-name=zendesk-inkeep-template)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finkeep%2Fzendesk-inkeep-template&env=ZENDESK_SUBDOMAIN,ZENDESK_API_TOKEN,ZENDESK_API_USER&project-name=zendesk-inkeep-responder-1&repository-name=zendesk-inkeep-responder-1)
 
 Required environment variables for deployment:
 - `DATABASE_URL`: Your PostgreSQL database connection string
