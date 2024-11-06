@@ -11,7 +11,7 @@ export interface ZendeskMessage {
     type: string;
     text: string;
   };
-  source: {
+  source?: {
     integrationId?: string;
     type: string;
   };

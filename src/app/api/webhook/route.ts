@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createClient } from "node-zendesk";
 import { generateQaModeResponse } from "@/lib/intelligent-support/support";
 import type { ZendeskMessage } from "@/lib/zendeskConversations";
+import { CreateOrUpdateTicket } from "node-zendesk/clients/core/tickets";
 
 // Initialize Zendesk client
 const client = createClient({
@@ -57,7 +58,7 @@ export const POST = async (req: Request) => {
     // If user belongs to an organization, fetch org details
     let orgDetails = null;
     if (userDetailsResponse.result.organization_id) {
-      orgDetails = await client.organizations.show(userDetailsResponse.result.organization_id);
+      orgDetails = await client.organizations.show(userDetailsResponse.result.organization_id) as any;
     }
 
     // Access user and org metadata
@@ -98,15 +99,21 @@ export const POST = async (req: Request) => {
           email: author.email,
         },
         content: {
+          type: 'text',
           text: comment.body,
         },
-        source: 'zendesk',
-      };
+        source: {
+          type: 'zendesk',
+        },
+      } as ZendeskMessage;
     });
 
     const response = await generateQaModeResponse({ messages, metadata: {
-      userMetadata,
-      organizationMetadata: {organization_fields, tags, notes, name}
+      ...userMetadata,
+      organization_fields,
+      tags,
+      notes,
+      name
     }})
 
 
@@ -119,7 +126,7 @@ export const POST = async (req: Request) => {
           public: !process.env.INTERNAL_ONLY,
         }
       }
-      });
+      } as CreateOrUpdateTicket);
     } else {
       // Then add the internal note with metadata
       await client.tickets.update(ticket_id, {
@@ -129,7 +136,7 @@ export const POST = async (req: Request) => {
             public: false,
           }
         }
-      });
+      } as CreateOrUpdateTicket);
     }
 
     return Response.json({ 
