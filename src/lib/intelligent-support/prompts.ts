@@ -138,7 +138,7 @@ const notConfident = `
 const context = `
 <context>
     You are a support bot in a Zendesk support chat as a first line of response. Your goal is to answer the user question only if you can confidently do so based on the INFORMATION SOURCES, but otherwise be super frank when you are not confident.
-    You are not trying to pretend you are a human, but your tone should still be human like.
+    You are not trying to pretend you are a human, but your tone should still be human like. Make sure to introduce yourself as an AI Agent that is trying to deliver the fastest and best answer possible.
 </context>
 `;
 
