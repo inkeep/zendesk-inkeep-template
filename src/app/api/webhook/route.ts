@@ -3,6 +3,7 @@ import { createClient } from 'node-zendesk';
 import { generateQaModeResponse } from '@/lib/intelligent-support/support';
 import type { ZendeskMessage } from '@/lib/zendeskConversations';
 import type { CreateOrUpdateTicket } from 'node-zendesk/clients/core/tickets';
+import { unstable_after as after } from 'next/server';
 
 export const maxDuration = 300;
 
@@ -67,7 +68,6 @@ export const POST = async (req: Request) => {
     console.log('User Metadata:', userMetadata);
     console.log('Organization Metadata:', organization_fields, tags, notes, name);
 
-    console.log(commentsResponse);
 
     // Create a cache for author details
     const authorCache = new Map<number, any>();
@@ -111,9 +111,10 @@ export const POST = async (req: Request) => {
       name,
     };
 
-    const response = await generateQaModeResponse({ messages, metadata });
+    after(async () => {
+      const response = await generateQaModeResponse({ messages, metadata });
 
-    if (response.aiAnnotations.answerConfidence === 'very_confident') {
+      console.log('AI draft response complete, posting to zendesk');
       // First add the public comment
       await client.tickets.update(ticket_id, {
         ticket: {
@@ -124,18 +125,19 @@ export const POST = async (req: Request) => {
           },
         },
       } as CreateOrUpdateTicket);
-    } else {
-      // Then add the internal note with metadata
-      await client.tickets.update(ticket_id, {
-        ticket: {
-          comment: {
-            body: `Internal Note\n\nUser Metadata: ${JSON.stringify(userMetadata, null, 2)}`,
-            public: false,
-            ...(process.env.AI_AGENT_USER_ID && { author_id: Number(process.env.AI_AGENT_USER_ID) }),
+      if (response.aiAnnotations.answerConfidence !== 'very_confident') {
+        console.log('not confident in user question');
+        await client.tickets.update(ticket_id, {
+          ticket: {
+            comment: {
+              body: `AI Agent had ${response.aiAnnotations.answerConfidence} confidence level in its answer`,
+              public: false,
+              ...(process.env.AI_AGENT_USER_ID && { author_id: Number(process.env.AI_AGENT_USER_ID) }),
+            },
           },
-        },
-      } as CreateOrUpdateTicket);
-    }
+        } as CreateOrUpdateTicket);
+      }
+    });
 
     return Response.json({
       message: 'Ticket processed',

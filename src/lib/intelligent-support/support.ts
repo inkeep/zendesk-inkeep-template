@@ -38,7 +38,6 @@ export const generateQaModeResponse = async ({
         }) as CoreMessage,
     ),
   ];
-  console.log(formattedMessages);
   const { text, toolCalls } = await generateText({
     model: openai(inkeepModel),
     messages: formattedMessages as CoreMessage[],

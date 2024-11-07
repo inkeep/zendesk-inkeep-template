@@ -117,6 +117,7 @@ const notConfident = `
         <good>All your statements must be explictly and fully justified by the INFORMATION SOURCES.</good>
         <good>Be circumspect and conservative, a human will step in if you're not able to answer.</good>
         <good>Simply state in a brief way the key sources (if any) you found and then briefly detail the remaining open questions or details needed.<good>
+        <good>Do explain that a human support agent has been notified and will follow up with the customer.<good>
         <example>
             I wasn't able to find all key details about <x>.
 
@@ -126,6 +127,8 @@ const notConfident = `
             Here were some relevant sources:
             - https://example.com/get-started) - Details how to <x>.
             - https://example.com/faq) - Discusses <y> limitation.
+
+            The support team has been notified and will follow up to help you with the remaining details.
 
         </example>
     </action>
@@ -142,8 +145,8 @@ const context = `
 // Create an array that puts together these prompt parts in logical order
 const systemPromptParts: string[] = [
   context,
-  plainText,
-  //   answerLinkFormat,
+//   plainText,
+    answerLinkFormat,
   codingAnswers,
   noSupportLine,
   notConfident,
