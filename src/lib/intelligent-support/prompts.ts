@@ -142,6 +142,8 @@ const context = `
 </context>
 `;
 
+const customInstructions = ''; // Add custom instructions here. For best results, use XML format, similar to the other prompt parts.
+
 // Create an array that puts together these prompt parts in logical order
 const systemPromptParts: string[] = [
   context,
@@ -152,6 +154,7 @@ const systemPromptParts: string[] = [
   notConfident,
   naturalHumanTonePrompt,
   conciseness,
+  customInstructions,
 ];
 
 export const systemPrompt = systemPromptParts.join('\n');
