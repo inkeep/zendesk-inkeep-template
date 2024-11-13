@@ -5,7 +5,7 @@ import type { ZendeskMessage } from '@/lib/zendeskConversations';
 import type { CreateOrUpdateTicket } from 'node-zendesk/clients/core/tickets';
 import { unstable_after as after } from 'next/server';
 
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 // Initialize Zendesk client
 const client = createClient({
