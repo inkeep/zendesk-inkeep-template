@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "zis": "bash ./scripts/setup-zis.sh",
     "start": "next start",
     "lint": "next lint"
   },
