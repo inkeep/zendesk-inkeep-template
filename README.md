@@ -46,12 +46,3 @@ To run the AI Autoresponder in debug mode:
 2. Redeploy the application
 
 In debug mode, the AI Auto Responder will only create internal notes (not visible to end-users) when responding to tickets.
-
-## Telemetry
-
-This template includes anonymous telemetry to help us understand usage patterns and improve the product. We only collect anonymous deployment events with no personal or sensitive information.
-
-To disable telemetry, set the environment variable:
-```bash
-INKEEP_TELEMETRY_DISABLED=true
-```
