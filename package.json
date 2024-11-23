@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.70",
+    "@ai-sdk/openai": "^1.0.4",
     "@t3-oss/env-nextjs": "^0.11.1",
-    "ai": "^3.4.33",
+    "ai": "^4.0.3",
     "next": "15.0.1",
     "node-zendesk": "^5.0.13",
     "react": "19.0.0-rc-69d4b800-20241021",
